@@ -1,6 +1,8 @@
 const express = require("express");
 const { startEventGenerator } = require("./event-generator");
 
+const expressPackage = require("express/package.json");
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -18,6 +20,19 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
   res.json({
     status: "healthy",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.get("/incident", (req, res) => {
+  res.status(200).json({
+    severity: "CRITICAL",
+    type: "VULNERABILITY_DETECTED",
+    package: "express",
+    current_version: expressPackage.version,
+    recommended_action: "upgrade",
+    message:
+      "Critical vulnerability found in express package. Please upgrade to the latest version available.",
     timestamp: new Date().toISOString(),
   });
 });
